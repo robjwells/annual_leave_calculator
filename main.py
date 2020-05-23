@@ -1,24 +1,25 @@
 """Partial-year annual leave calculator
 
-This calculates how many days of annual leave a new employee can take
-for the rest of the year.
+This script calculates how many annual leave days an employee will accrue
+for working a portion of a year.
 
-This assumes the annual leave year matches the calendar year (Jan 1-Dec 31).
+This is helpful for calculating new employees’ leave entitlement,
+how much leaving employees will accrue by the day they finish,
+or how many days temporary employees are entitled to take.
 
-This works by taking the full leave allowance for the year (as if the
-employee started on January 1), and keeping a proportion of it that
-matches the proportion of days left in the year.
+This script currently assumes that the annual leave year matches
+the calendar year (and so runs January 1–December 31).
 
-The proportion of the year that remains is worked out by getting the year
-length (365 or 366) and dividing the number of days left in the year by it.
+If your leave year starts part-way through the calendar year,
+it will need some conditional logic to set the constants
+AL_YEAR_START and AL_YEAR_END.
 
-The number of days left in the year is calculated by taking the day of the year
-(strftime %j) and subtracting it from the year length.
+The actual calculation is simple: the length of the employee’s working
+period as a proportion of the length of the leave year.
 
-Or in short:
-
-    AL left = year AL allowance * (days left / year length)
-
+The 'Employee finish date' should either be the annual leave year
+end date (for new employees) or the employee’s final day with the
+company (and so is included in the leave accrual calculation.)
 """
 from datetime import datetime
 from typing import Callable, TypeVar
