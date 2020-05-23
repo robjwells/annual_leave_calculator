@@ -29,32 +29,40 @@ AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
 STATUTORY_AL = 28
 
 
-def main():
+def prompt_for_al_amount(default=STATUTORY_AL):
+    try:
+        return float(
+            input(f"How many days annual leave for the full year? [{default}] ")
+        )
+    except ValueError:
+        return default
 
+
+def prompt_for_start_date(default=AL_YEAR_START):
     try:
-        al_for_full_year = float(
-            input(f"How many days annual leave for the full year? [{STATUTORY_AL}] ")
-        )
-    except ValueError:
-        al_for_full_year = STATUTORY_AL
-    try:
-        start_date = datetime.strptime(
-            input(
-                f"Employee start date in YYYY-MM-DD format [{AL_YEAR_START:%Y-%m-%d}]: "
-            ),
+        return datetime.strptime(
+            input(f"Employee start date in YYYY-MM-DD format [{default:%Y-%m-%d}]: "),
             "%Y-%m-%d",
         )
     except ValueError:
-        start_date = AL_YEAR_START
+        return default
+
+
+def prompt_for_end_date(default=AL_YEAR_END):
     try:
-        end_date = datetime.strptime(
-            input(
-                f"Employee finish date in YYYY-MM-DD format [{AL_YEAR_END:%Y-%m-%d}): "
-            ),
+        return datetime.strptime(
+            input(f"Employee finish date in YYYY-MM-DD format [{default:%Y-%m-%d}): "),
             "%Y-%m-%d",
         )
     except ValueError:
-        end_date = AL_YEAR_END
+        return default
+
+
+
+def main():
+    al_for_full_year = prompt_for_al_amount()
+    start_date = prompt_for_start_date()
+    end_date = prompt_for_end_date()
 
     al_period_length = (end_date - start_date).days + 1
     # +1 as we assume, eg, starting and leaving on Jan 1 accrues
