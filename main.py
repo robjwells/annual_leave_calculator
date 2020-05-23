@@ -35,9 +35,7 @@ T = TypeVar("T")
 
 def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -> T:
     try:
-        return constructor(
-            input(f"How many days annual leave for the full year? [{default}] ")
-        )
+        return constructor(input(message))
     except ValueError:
         return default
 
