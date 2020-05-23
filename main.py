@@ -7,13 +7,6 @@ This is helpful for calculating new employees’ leave entitlement,
 how much leaving employees will accrue by the day they finish,
 or how many days temporary employees are entitled to take.
 
-This script currently assumes that the annual leave year matches
-the calendar year (and so runs January 1–December 31).
-
-If your leave year starts part-way through the calendar year,
-it will need some conditional logic to set the constants
-AL_YEAR_START and AL_YEAR_END.
-
 The actual calculation is simple: the length of the employee’s working
 period as a proportion of the length of the leave year.
 
@@ -27,14 +20,8 @@ Constants
 AL_YEAR_START
 -------------
 
-The first day of the annual leave year
+The default first day of the annual leave year
 (by default January 1 of the current year).
-
-AL_YEAR_END
------------
-
-The last day of the annual leave year
-(by default December 31 of the current year).
 
 STATUTORY_AL
 ------------
@@ -54,30 +41,33 @@ The precision to round the resulting annual leave allowance
 (by default 2 decimal places).
 
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Callable, TypeVar
 
 T = TypeVar("T")
 current_year = datetime.now().year
 
 # Modify these constants to suit your circumstances
-AL_YEAR_START = datetime(current_year, month=1, day=1)
-AL_YEAR_END = datetime(current_year, month=12, day=31)
+DEFAULT_AL_YEAR_START = datetime(current_year, month=1, day=1)
 STATUTORY_AL = 28
 RESULT_DECIMAL_PLACES = 2
 
 
 def main() -> None:
     al_for_full_year = prompt_for_al_amount()
-    start_date = prompt_for_date("start", default=AL_YEAR_START)
-    end_date = prompt_for_date("finish", default=AL_YEAR_END)
 
-    al_year_length = (AL_YEAR_END - AL_YEAR_START).days + 1
-    al_period_length = (end_date - start_date).days + 1
+    al_year_start = prompt_for_date("Leave year start", default=DEFAULT_AL_YEAR_START)
+    al_year_end = al_year_start.replace(year=al_year_start.year + 1) - timedelta(days=1)
+
+    start_date = prompt_for_date("Employee start", default=al_year_start)
+    end_date = prompt_for_date("Employee finish", default=al_year_end)
+
+    al_year_days = (al_year_end - al_year_start).days + 1
+    employed_days = (end_date - start_date).days + 1
     # +1 as we assume, eg, starting and leaving on Jan 1 accrues
     # 1 day's worth of leave, not zero
 
-    proportion_of_al_year_worked = al_period_length / al_year_length
+    proportion_of_al_year_worked = employed_days / al_year_days
     al_days_available = al_for_full_year * proportion_of_al_year_worked
     print(round(al_days_available, RESULT_DECIMAL_PLACES), "days annual leave")
 
@@ -99,7 +89,7 @@ def prompt_for_al_amount(default: float = STATUTORY_AL) -> float:
 
 def prompt_for_date(which: str, default: datetime) -> datetime:
     return _prompt_wrapper(
-        message=f"Employee {which} date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
+        message=f"{which} date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
         default=default,
         constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
     )
