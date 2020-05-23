@@ -77,7 +77,7 @@ def main() -> None:
 
     proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
     al_days_available = al_for_full_year * proportion_of_al_year_worked
-    print(f"{round(al_days_available, RESULT_DECIMAL_PLACES)} days annual leave")
+    print(round(al_days_available, RESULT_DECIMAL_PLACES), "days annual leave")
 
 
 T = TypeVar("T")
