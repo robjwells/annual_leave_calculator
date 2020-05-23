@@ -35,14 +35,14 @@ The precision to round the resulting annual leave allowance
 (by default 2 decimal places).
 
 """
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from typing import Callable, TypeVar
 
 T = TypeVar("T")
-current_year = datetime.now().year
+current_year = date.today().year
 
 # Modify these constants to suit your circumstances
-DEFAULT_AL_YEAR_START = datetime(current_year, month=1, day=1)
+DEFAULT_AL_YEAR_START = date(current_year, month=1, day=1)
 DEFAULT_AL = 28
 RESULT_DECIMAL_PLACES = 2
 
@@ -81,11 +81,11 @@ def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
     )
 
 
-def prompt_for_date(which: str, default: datetime) -> datetime:
+def prompt_for_date(which: str, default: date) -> date:
     return _prompt_wrapper(
         message=f"{which} date [{default:%Y-%m-%d}]: ",
         default=default,
-        constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
+        constructor=date.fromisoformat
     )
 
 
