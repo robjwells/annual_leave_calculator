@@ -68,8 +68,8 @@ RESULT_DECIMAL_PLACES = 2
 
 def main() -> None:
     al_for_full_year = prompt_for_al_amount()
-    start_date = prompt_for_start_date()
-    end_date = prompt_for_end_date()
+    start_date = prompt_for_date("start", default=AL_YEAR_START)
+    end_date = prompt_for_date("finish", default=AL_YEAR_END)
 
     al_period_length = (end_date - start_date).days + 1
     # +1 as we assume, eg, starting and leaving on Jan 1 accrues
@@ -98,17 +98,9 @@ def prompt_for_al_amount(default: float = STATUTORY_AL) -> float:
     )
 
 
-def prompt_for_start_date(default: datetime = AL_YEAR_START) -> datetime:
+def prompt_for_date(which: str, default: datetime) -> datetime:
     return _prompt_wrapper(
-        message=f"Employee start date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
-        default=default,
-        constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
-    )
-
-
-def prompt_for_end_date(default: datetime = AL_YEAR_END) -> datetime:
-    return _prompt_wrapper(
-        message=f"Employee finish date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
+        message=f"Employee {which} date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
         default=default,
         constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
     )
