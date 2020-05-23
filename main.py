@@ -30,6 +30,20 @@ AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
 STATUTORY_AL = 28
 
 
+def main() -> None:
+    al_for_full_year = prompt_for_al_amount()
+    start_date = prompt_for_start_date()
+    end_date = prompt_for_end_date()
+
+    al_period_length = (end_date - start_date).days + 1
+    # +1 as we assume, eg, starting and leaving on Jan 1 accrues
+    # 1 day's worth of leave, not zero
+
+    proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
+    al_days_available = al_for_full_year * proportion_of_al_year_worked
+    print(f"{round(al_days_available, 2)} days annual leave")
+
+
 T = TypeVar("T")
 
 
@@ -62,20 +76,6 @@ def prompt_for_end_date(default: datetime = AL_YEAR_END) -> datetime:
         default=default,
         constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
     )
-
-
-def main() -> None:
-    al_for_full_year = prompt_for_al_amount()
-    start_date = prompt_for_start_date()
-    end_date = prompt_for_end_date()
-
-    al_period_length = (end_date - start_date).days + 1
-    # +1 as we assume, eg, starting and leaving on Jan 1 accrues
-    # 1 day's worth of leave, not zero
-
-    proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
-    al_days_available = al_for_full_year * proportion_of_al_year_worked
-    print(f"{round(al_days_available, 2)} days annual leave")
 
 
 if __name__ == "__main__":
