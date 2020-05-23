@@ -82,7 +82,7 @@ def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
 
 def prompt_for_date(which: str, default: date) -> date:
     return _prompt_wrapper(
-        message=f"{which} date [{default:%Y-%m-%d}]: ",
+        message=f"{which} date [{default.isoformat()}]: ",
         default=default,
         constructor=date.fromisoformat,
     )
