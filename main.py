@@ -57,6 +57,7 @@ The precision to round the resulting annual leave allowance
 from datetime import datetime
 from typing import Callable, TypeVar
 
+T = TypeVar("T")
 current_year = datetime.now().year
 
 AL_YEAR_START = datetime(current_year, month=1, day=1)
@@ -78,9 +79,6 @@ def main() -> None:
     proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
     al_days_available = al_for_full_year * proportion_of_al_year_worked
     print(round(al_days_available, RESULT_DECIMAL_PLACES), "days annual leave")
-
-
-T = TypeVar("T")
 
 
 def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -> T:
