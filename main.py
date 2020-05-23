@@ -42,7 +42,7 @@ The precision to round the resulting annual leave allowance
 """
 from datetime import date, timedelta
 from typing import Callable, TypeVar
-from sys import exit
+from sys import stderr
 
 T = TypeVar("T")
 
@@ -76,7 +76,8 @@ def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -
         entered = input(message).strip()
         return constructor(entered) if entered else default
     except ValueError as e:
-        exit(f"Encountered error: {e}")
+        print(e, file=stderr)
+        return _prompt_wrapper(message, default, constructor)
 
 
 def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
