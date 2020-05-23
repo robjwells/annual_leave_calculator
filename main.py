@@ -23,16 +23,10 @@ AL_YEAR_START
 The default first day of the annual leave year
 (by default January 1 of the current year).
 
-STATUTORY_AL
-------------
+DEFAULT AL
+----------
 
-The default amount of leave (by default 28 days,
-the current UK statutory minimum annual leave allowance).
-
-You should probably set it to be the amount of discretionary leave
-that an employee can take, especially if you otherwise include (eg
-in the UK) bank holidays in the annual leave total, as these are
-taken automatically on specific days in the year.
+The default amount of leave (by default 28 days).
 
 RESULT_DECIMAL_PLACES
 ---------------------
@@ -49,7 +43,7 @@ current_year = datetime.now().year
 
 # Modify these constants to suit your circumstances
 DEFAULT_AL_YEAR_START = datetime(current_year, month=1, day=1)
-STATUTORY_AL = 28
+DEFAULT_AL = 28
 RESULT_DECIMAL_PLACES = 2
 
 
@@ -79,7 +73,7 @@ def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -
         return default
 
 
-def prompt_for_al_amount(default: float = STATUTORY_AL) -> float:
+def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
     return _prompt_wrapper(
         message=f"How many days annual leave for the full year? [{default}] ",
         default=default,
