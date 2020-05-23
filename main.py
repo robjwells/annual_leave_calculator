@@ -21,6 +21,7 @@ Or in short:
 
 """
 from datetime import datetime
+from typing import Callable, TypeVar
 
 CURRENT_YEAR = datetime.now().year
 AL_YEAR_START = datetime(CURRENT_YEAR, month=1, day=1)
@@ -29,34 +30,41 @@ AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
 STATUTORY_AL = 28
 
 
-def prompt_for_al_amount(default=STATUTORY_AL):
+T = TypeVar("T")
+StringConstructor = Callable[[str], T]
+
+
+def _prompt_wrapper(message: str, default: T, constructor: StringConstructor[T]) -> T:
     try:
-        return float(
+        return constructor(
             input(f"How many days annual leave for the full year? [{default}] ")
         )
     except ValueError:
         return default
 
 
-def prompt_for_start_date(default=AL_YEAR_START):
-    try:
-        return datetime.strptime(
-            input(f"Employee start date in YYYY-MM-DD format [{default:%Y-%m-%d}]: "),
-            "%Y-%m-%d",
-        )
-    except ValueError:
-        return default
+def prompt_for_al_amount(default: float = STATUTORY_AL) -> float:
+    return _prompt_wrapper(
+        message=f"How many days annual leave for the full year? [{default}] ",
+        default=default,
+        constructor=float,
+    )
 
 
-def prompt_for_end_date(default=AL_YEAR_END):
-    try:
-        return datetime.strptime(
-            input(f"Employee finish date in YYYY-MM-DD format [{default:%Y-%m-%d}): "),
-            "%Y-%m-%d",
-        )
-    except ValueError:
-        return default
+def prompt_for_start_date(default: datetime = AL_YEAR_START) -> datetime:
+    return _prompt_wrapper(
+        message=f"Employee start date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
+        default=default,
+        constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
+    )
 
+
+def prompt_for_end_date(default: datetime = AL_YEAR_END) -> datetime:
+    return _prompt_wrapper(
+        message=f"Employee finish date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
+        default=default,
+        constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
+    )
 
 
 def main():
