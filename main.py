@@ -22,41 +22,45 @@ Or in short:
 """
 from datetime import datetime
 
+CURRENT_YEAR = datetime.now().year
+AL_YEAR_START = datetime(CURRENT_YEAR, month=1, day=1)
+AL_YEAR_END = datetime(CURRENT_YEAR, month=12, day=31)
+AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
+STATUTORY_AL = 28
+
+
 def main():
-    current_year = datetime.now().year
-    al_year_start = datetime(current_year, month=1, day=1)
-    al_year_end = datetime(current_year, month=12, day=31)
-    al_year_length = (al_year_end - al_year_start).days + 1
-    statutory_al = 28
 
     try:
-        al_for_full_year = float(input(f"How many days annual leave for the full year? [{statutory_al}] "))
+        al_for_full_year = float(
+            input(f"How many days annual leave for the full year? [{STATUTORY_AL}] ")
+        )
     except ValueError:
-        al_for_full_year = statutory_al
+        al_for_full_year = STATUTORY_AL
     try:
         start_date = datetime.strptime(
             input(
-                f"Employee start date in YYYY-MM-DD format [{al_year_start:%Y-%m-%d}]: "
+                f"Employee start date in YYYY-MM-DD format [{AL_YEAR_START:%Y-%m-%d}]: "
             ),
             "%Y-%m-%d",
         )
     except ValueError:
-        start_date = al_year_start
+        start_date = AL_YEAR_START
     try:
         end_date = datetime.strptime(
             input(
-                f"Employee finish date in YYYY-MM-DD format [{al_year_end:%Y-%m-%d}): "
+                f"Employee finish date in YYYY-MM-DD format [{AL_YEAR_END:%Y-%m-%d}): "
             ),
             "%Y-%m-%d",
         )
     except ValueError:
-        end_date = al_year_end
+        end_date = AL_YEAR_END
 
     al_period_length = (end_date - start_date).days + 1
     # +1 as we assume, eg, starting and leaving on Jan 1 accrues
     # 1 day's worth of leave, not zero
 
-    proportion_of_al_year_worked = al_period_length / al_year_length
+    proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
     al_days_available = al_for_full_year * proportion_of_al_year_worked
     print(f"{round(al_days_available, 2)} days annual leave")
 
