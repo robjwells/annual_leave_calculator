@@ -28,6 +28,7 @@ AL_YEAR_START = datetime(CURRENT_YEAR, month=1, day=1)
 AL_YEAR_END = datetime(CURRENT_YEAR, month=12, day=31)
 AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
 STATUTORY_AL = 28
+RESULT_DECIMAL_PLACES = 2
 
 
 def main() -> None:
@@ -41,7 +42,7 @@ def main() -> None:
 
     proportion_of_al_year_worked = al_period_length / AL_YEAR_LENGTH
     al_days_available = al_for_full_year * proportion_of_al_year_worked
-    print(f"{round(al_days_available, 2)} days annual leave")
+    print(f"{round(al_days_available, RESULT_DECIMAL_PLACES)} days annual leave")
 
 
 T = TypeVar("T")
