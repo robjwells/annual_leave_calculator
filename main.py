@@ -1,7 +1,7 @@
 """Partial-year annual leave calculator
 
-This script calculates how many annual leave days an employee will accrue
-for working a portion of a year.
+This script calculates how many annual leave days an employee
+will accrue for working a portion of a year.
 
 This is helpful for calculating new employees’ leave entitlement,
 how much leaving employees will accrue by the day they finish,
@@ -20,13 +20,47 @@ period as a proportion of the length of the leave year.
 The 'Employee finish date' should either be the annual leave year
 end date (for new employees) or the employee’s final day with the
 company (and so is included in the leave accrual calculation.)
+
+Constants
+=========
+
+AL_YEAR_START
+-------------
+
+The first day of the annual leave year
+(by default January 1 of the current year).
+
+AL_YEAR_END
+-----------
+
+The last day of the annual leave year
+(by default December 31 of the current year).
+
+STATUTORY_AL
+------------
+
+The default amount of leave (by default 28 days,
+the current UK statutory minimum annual leave allowance).
+
+You should probably set it to be the amount of discretionary leave
+that an employee can take, especially if you otherwise include (eg
+in the UK) bank holidays in the annual leave total, as these are
+taken automatically on specific days in the year.
+
+RESULT_DECIMAL_PLACES
+---------------------
+
+The precision to round the resulting annual leave allowance
+(by default 2 decimal places).
+
 """
 from datetime import datetime
 from typing import Callable, TypeVar
 
-CURRENT_YEAR = datetime.now().year
-AL_YEAR_START = datetime(CURRENT_YEAR, month=1, day=1)
-AL_YEAR_END = datetime(CURRENT_YEAR, month=12, day=31)
+current_year = datetime.now().year
+
+AL_YEAR_START = datetime(current_year, month=1, day=1)
+AL_YEAR_END = datetime(current_year, month=12, day=31)
 AL_YEAR_LENGTH = (AL_YEAR_END - AL_YEAR_START).days + 1
 STATUTORY_AL = 28
 RESULT_DECIMAL_PLACES = 2
