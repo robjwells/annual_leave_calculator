@@ -17,8 +17,8 @@ company (and so is included in the leave accrual calculation.)
 Constants
 =========
 
-AL_YEAR_START
--------------
+DEFAULT_AL_YEAR_START
+---------------------
 
 The default first day of the annual leave year
 (by default January 1 of the current year).
@@ -39,10 +39,9 @@ from datetime import date, timedelta
 from typing import Callable, TypeVar
 
 T = TypeVar("T")
-current_year = date.today().year
 
 # Modify these constants to suit your circumstances
-DEFAULT_AL_YEAR_START = date(current_year, month=1, day=1)
+DEFAULT_AL_YEAR_START = date.today().replace(month=1, day=1)
 DEFAULT_AL = 28
 RESULT_DECIMAL_PLACES = 2
 
@@ -85,7 +84,7 @@ def prompt_for_date(which: str, default: date) -> date:
     return _prompt_wrapper(
         message=f"{which} date [{default:%Y-%m-%d}]: ",
         default=default,
-        constructor=date.fromisoformat
+        constructor=date.fromisoformat,
     )
 
 
