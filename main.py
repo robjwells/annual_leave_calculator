@@ -41,7 +41,7 @@ The precision to round the resulting annual leave allowance
 
 """
 from datetime import date, timedelta
-from typing import Callable, TypeVar
+from typing import Callable, Optional, TypeVar
 from sys import stderr
 
 T = TypeVar("T")
@@ -71,20 +71,20 @@ def main() -> None:
     print(round(al_days_available, RESULT_DECIMAL_PLACES), "days annual leave")
 
 
-def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -> T:
+def _prompt_wrapper(message: str, parser: Callable[[str], T], default: T) -> T:
     try:
         entered = input(message).strip()
-        return constructor(entered) if entered else default
+        return parser(entered) if entered else default
     except ValueError as e:
         print(e, file=stderr)
-        return _prompt_wrapper(message, default, constructor)
+        return _prompt_wrapper(message=message, parser=parser, default=default)
 
 
 def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
     return _prompt_wrapper(
         message=f"How many days annual leave for the full year? [{default}] ",
         default=default,
-        constructor=float,
+        parser=float,
     )
 
 
@@ -92,7 +92,7 @@ def prompt_for_date(which: str, default: date) -> date:
     return _prompt_wrapper(
         message=f"{which} date [{default.isoformat()}]: ",
         default=default,
-        constructor=date.fromisoformat,
+        parser=date.fromisoformat,
     )
 
 
