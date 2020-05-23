@@ -73,8 +73,8 @@ def main() -> None:
 
 def _prompt_wrapper(message: str, default: T, constructor: Callable[[str], T]) -> T:
     try:
-        entered = input(message)
-        return constructor(entered) if entered.strip() else default
+        entered = input(message).strip()
+        return constructor(entered) if entered else default
     except ValueError as e:
         print(f"Encountered error: {e}", file=stderr)
         exit(1)
