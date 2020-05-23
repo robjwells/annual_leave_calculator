@@ -66,7 +66,7 @@ def prompt_for_end_date(default: datetime = AL_YEAR_END) -> datetime:
     )
 
 
-def main():
+def main() -> None:
     al_for_full_year = prompt_for_al_amount()
     start_date = prompt_for_start_date()
     end_date = prompt_for_end_date()
