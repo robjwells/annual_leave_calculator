@@ -83,7 +83,7 @@ def prompt_for_al_amount(default: float = DEFAULT_AL) -> float:
 
 def prompt_for_date(which: str, default: datetime) -> datetime:
     return _prompt_wrapper(
-        message=f"{which} date in YYYY-MM-DD format [{default:%Y-%m-%d}]: ",
+        message=f"{which} date [{default:%Y-%m-%d}]: ",
         default=default,
         constructor=lambda s: datetime.strptime(s, "%Y-%m-%d"),
     )
