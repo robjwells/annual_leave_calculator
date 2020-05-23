@@ -27,8 +27,12 @@ def main():
     al_year_start = datetime(current_year, month=1, day=1)
     al_year_end = datetime(current_year, month=12, day=31)
     al_year_length = (al_year_end - al_year_start).days + 1
+    statutory_al = 28
 
-    al_for_full_year = float(input(f"How many days annual leave for the full year? [{statutory_al}] "))
+    try:
+        al_for_full_year = float(input(f"How many days annual leave for the full year? [{statutory_al}] "))
+    except ValueError:
+        al_for_full_year = statutory_al
     try:
         start_date = datetime.strptime(
             input(
